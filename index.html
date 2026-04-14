@@ -1,0 +1,423 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-primary);color:var(--color-text-primary)}
+:root{--gold:#b8972a;--gold-light:#e8d48a;--cream:#faf8f2}
+nav{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
+.logo{font-size:18px;font-weight:500;color:var(--gold);letter-spacing:2px}
+.logo span{font-size:11px;display:block;color:var(--color-text-secondary);letter-spacing:4px;font-weight:400}
+.nav-links{display:flex;gap:4px}
+.nav-links button{background:none;border:none;padding:6px 12px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;border-radius:var(--border-radius-md);transition:all .2s}
+.nav-links button:hover,.nav-links button.active{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.page{display:none;padding:0}
+.page.active{display:block}
+.hero{background:linear-gradient(160deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 5 L55 30 L30 55 L5 30Z' fill='none' stroke='%23b8972a' stroke-width='0.3' opacity='0.15'/%3E%3C/svg%3E");opacity:.4}
+.hero-badge{background:rgba(184,151,42,.15);border:0.5px solid var(--gold);color:var(--gold-light);padding:6px 20px;border-radius:20px;font-size:11px;letter-spacing:3px;margin-bottom:1.5rem}
+.hero h1{font-size:clamp(2rem,6vw,4rem);font-weight:500;color:#fff;letter-spacing:3px;line-height:1.2;margin-bottom:.5rem}
+.hero h1 em{font-style:italic;color:var(--gold-light)}
+.hero p{color:rgba(255,255,255,.7);font-size:15px;max-width:480px;margin:1rem auto 2rem;line-height:1.8}
+.btn-gold{background:var(--gold);color:#fff;border:none;padding:12px 32px;border-radius:var(--border-radius-md);font-size:14px;cursor:pointer;letter-spacing:1px;transition:all .2s}
+.btn-gold:hover{background:#c9a83a;transform:translateY(-1px)}
+.btn-outline{background:none;border:0.5px solid var(--gold);color:var(--gold-light);padding:12px 28px;border-radius:var(--border-radius-md);font-size:14px;cursor:pointer;letter-spacing:1px;transition:all .2s;margin-left:12px}
+.btn-outline:hover{background:rgba(184,151,42,.1)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--color-border-tertiary);border-top:1px solid var(--color-border-tertiary)}
+.stat{background:var(--color-background-primary);padding:1.5rem;text-align:center}
+.stat-n{font-size:28px;font-weight:500;color:var(--gold)}
+.stat-l{font-size:12px;color:var(--color-text-secondary);letter-spacing:2px;margin-top:4px}
+.section{padding:4rem 2rem;max-width:1100px;margin:0 auto}
+.section-tag{font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:.5rem}
+.section-title{font-size:clamp(1.4rem,3vw,2rem);font-weight:500;margin-bottom:1rem}
+.section-sub{color:var(--color-text-secondary);line-height:1.8;max-width:600px;margin-bottom:2.5rem}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;transition:all .2s}
+.card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.card-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:48px;background:var(--color-background-secondary)}
+.card-body{padding:1.25rem}
+.card-body h3{font-size:15px;font-weight:500;margin-bottom:.4rem}
+.card-body p{font-size:13px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:.8rem}
+.card-price{font-size:18px;font-weight:500;color:var(--gold)}
+.card-price span{font-size:12px;color:var(--color-text-secondary);font-weight:400}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:2rem 0}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.about-visual{background:linear-gradient(135deg,#1a1a2e,#0f3460);border-radius:var(--border-radius-lg);height:350px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.about-visual span{font-size:64px}
+.about-visual p{color:rgba(255,255,255,.6);font-size:12px;letter-spacing:3px}
+.timeline{margin-top:1.5rem}
+.tl-item{display:flex;gap:16px;margin-bottom:1.2rem}
+.tl-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);margin-top:6px;flex-shrink:0}
+.tl-text h4{font-size:13px;font-weight:500;margin-bottom:2px}
+.tl-text p{font-size:12px;color:var(--color-text-secondary)}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem}
+.team-card{text-align:center;padding:1.5rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg)}
+.avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#1a1a2e,#0f3460);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px}
+.team-card h4{font-size:14px;font-weight:500;margin-bottom:4px}
+.team-card p{font-size:12px;color:var(--color-text-secondary)}
+.form-wrap{max-width:600px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-group{margin-bottom:1rem;display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:12px;letter-spacing:1px;color:var(--color-text-secondary)}
+.form-group input,.form-group select,.form-group textarea{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;font-size:14px;color:var(--color-text-primary);font-family:var(--font-sans);width:100%}
+.form-group textarea{resize:vertical;min-height:100px}
+.booking-tabs{display:flex;gap:8px;margin-bottom:2rem}
+.tab-btn{padding:8px 20px;border:0.5px solid var(--color-border-tertiary);background:none;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;color:var(--color-text-secondary);transition:all .2s}
+.tab-btn.active{background:var(--gold);color:#fff;border-color:var(--gold)}
+.booking-form{display:none}
+.booking-form.active{display:block}
+.price-summary{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.5rem;margin-top:1.5rem}
+.price-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.price-row:last-child{border:none;font-weight:500;font-size:15px;padding-top:12px}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gallery-item{border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:all .2s}
+.gallery-item:hover{border-color:var(--gold);transform:scale(1.01)}
+.gal-thumb{height:160px;display:flex;align-items:center;justify-content:center;font-size:40px;background:var(--color-background-secondary)}
+.gal-label{padding:10px;font-size:12px;color:var(--color-text-secondary);background:var(--color-background-primary)}
+.video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:2rem}
+.video-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.video-thumb{height:160px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1a2e,#0f3460);cursor:pointer;position:relative}
+.play-btn{width:50px;height:50px;border-radius:50%;background:rgba(184,151,42,.9);display:flex;align-items:center;justify-content:center;font-size:20px;transition:all .2s}
+.video-thumb:hover .play-btn{transform:scale(1.1);background:var(--gold)}
+.video-meta{padding:1rem}
+.video-meta h4{font-size:14px;font-weight:500;margin-bottom:4px}
+.video-meta p{font-size:12px;color:var(--color-text-secondary)}
+footer{background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary);padding:3rem 2rem 1.5rem;text-align:center}
+footer .logo{margin-bottom:.5rem}
+footer p{font-size:12px;color:var(--color-text-secondary);margin-top:.5rem}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+.info-card{padding:1.5rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);margin-bottom:1rem}
+.info-card h4{font-size:13px;letter-spacing:2px;color:var(--gold);margin-bottom:.5rem}
+.info-card p{font-size:14px;line-height:1.8;color:var(--color-text-primary)}
+.map-placeholder{height:200px;background:linear-gradient(135deg,#1a1a2e,#0f3460);border-radius:var(--border-radius-lg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;margin-bottom:1rem}
+.map-placeholder span{font-size:32px}
+.map-placeholder p{color:rgba(255,255,255,.6);font-size:12px;letter-spacing:2px}
+.success-msg{display:none;background:var(--color-background-success);border:0.5px solid var(--color-border-success);color:var(--color-text-success);padding:12px 16px;border-radius:var(--border-radius-md);font-size:14px;margin-bottom:1rem}
+@media(max-width:700px){.about-grid,.contact-grid,.team-grid,.form-row{grid-template-columns:1fr}.gallery-grid{grid-template-columns:repeat(2,1fr)}.video-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<nav>
+  <div class="logo">THE ANANTARA GRAND<span>RESORT & BANQUET</span></div>
+  <div class="nav-links">
+    <button class="active" onclick="showPage('home',this)">Home</button>
+    <button onclick="showPage('about',this)">About</button>
+    <button onclick="showPage('booking',this)">Rooms & Booking</button>
+    <button onclick="showPage('gallery',this)">Gallery</button>
+    <button onclick="showPage('contact',this)">Contact</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">LUXURY RESORT & BANQUET</div>
+    <h1>THE ANANTARA<br><em>GRAND</em></h1>
+    <p>Where timeless elegance meets modern luxury. Experience unparalleled hospitality in the heart of India's finest destination resort.</p>
+    <div>
+      <button class="btn-gold" onclick="showPage('booking',document.querySelectorAll('.nav-links button')[2])">Book a Stay</button>
+      <button class="btn-outline" onclick="showPage('gallery',document.querySelectorAll('.nav-links button')[3])">View Gallery</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-n">127</div><div class="stat-l">LUXURY ROOMS</div></div>
+    <div class="stat"><div class="stat-n">12</div><div class="stat-l">BANQUET HALLS</div></div>
+    <div class="stat"><div class="stat-n">5000+</div><div class="stat-l">GUESTS SERVED</div></div>
+    <div class="stat"><div class="stat-n">25+</div><div class="stat-l">YEARS OF EXCELLENCE</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-tag">OUR OFFERINGS</div>
+    <div class="section-title">Crafted for Every Occasion</div>
+    <div class="section-sub">From intimate retreats to grand celebrations, The Anantara Grand offers world-class experiences tailored for you.</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-img">🛏️</div>
+        <div class="card-body">
+          <h3>Luxury Rooms & Suites</h3>
+          <p>Indulge in opulently designed rooms with panoramic views, premium amenities, and personalized butler service.</p>
+          <div class="card-price">₹8,500 <span>/ night onwards</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🥂</div>
+        <div class="card-body">
+          <h3>Banquet & Events</h3>
+          <p>Our grand banquet halls accommodate up to 2000 guests with state-of-the-art AV, catering, and decor services.</p>
+          <div class="card-price">₹1,20,000 <span>/ event onwards</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img">🍽️</div>
+        <div class="card-body">
+          <h3>Fine Dining</h3>
+          <p>Three signature restaurants serving Indian, Continental, and Asian cuisines, plus a rooftop bar with skyline views.</p>
+          <div class="card-price">₹1,800 <span>/ cover onwards</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--color-background-secondary);padding:4rem 2rem;text-align:center">
+    <div style="max-width:700px;margin:0 auto">
+      <div class="section-tag" style="text-align:center">TESTIMONIALS</div>
+      <div style="font-size:1.6rem;color:var(--gold);margin:1rem 0">❝</div>
+      <p style="font-size:16px;line-height:1.9;color:var(--color-text-primary);font-style:italic">"An extraordinary experience from the moment we arrived. The attention to detail, the impeccable service, and the breathtaking ambiance made our wedding the most memorable day of our lives."</p>
+      <p style="margin-top:1rem;font-size:13px;color:var(--color-text-secondary);letter-spacing:1px">— PRIYA & RAHUL MEHTA, Wedding 2024</p>
+    </div>
+  </div>
+  <footer>
+    <div class="logo">THE ANANTARA GRAND</div>
+    <p>© 2025 The Anantara Grand Resort & Banquet. All rights reserved.</p>
+    <p style="margin-top:8px">📍 Grand Boulevard, Connaught Place, New Delhi — 110001</p>
+  </footer>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="page">
+  <div style="background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:4rem 2rem;text-align:center">
+    <div class="section-tag" style="text-align:center;color:var(--gold-light)">OUR STORY</div>
+    <h1 style="font-size:2.5rem;font-weight:500;color:#fff;letter-spacing:2px;margin-top:.5rem">A Legacy of Luxury</h1>
+    <p style="color:rgba(255,255,255,.7);max-width:550px;margin:.8rem auto;line-height:1.8">For over 25 years, The Anantara Grand has defined the standard of hospitality in India.</p>
+  </div>
+  <div class="section">
+    <div class="about-grid">
+      <div>
+        <div class="section-tag">WHO WE ARE</div>
+        <div class="section-title">More Than a Resort</div>
+        <p style="color:var(--color-text-secondary);line-height:1.9;margin-bottom:1rem">Founded in 1999, The Anantara Grand began as a vision to create India's most distinguished resort and banquet destination. Today, it stands as an iconic landmark blending Mughal grandeur with contemporary luxury.</p>
+        <p style="color:var(--color-text-secondary);line-height:1.9">Every corner of our property tells a story — from hand-carved pillars to curated art collections sourced from master craftsmen across India.</p>
+        <div class="timeline" style="margin-top:1.5rem">
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-text"><h4>1999 — Founding</h4><p>The Anantara Grand opens its doors with 50 rooms</p></div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-text"><h4>2007 — Grand Expansion</h4><p>Banquet wing added, capacity grows to 127 rooms</p></div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-text"><h4>2015 — Heritage Award</h4><p>Recognized as India's Best Luxury Resort by HT Travel Awards</p></div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-text"><h4>2024 — Renovation</h4><p>Complete spa & wellness wing unveiled</p></div></div>
+        </div>
+      </div>
+      <div class="about-visual"><span>🏛️</span><p>SINCE 1999</p></div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-tag">LEADERSHIP</div>
+    <div class="section-title">Meet Our Team</div>
+    <div class="team-grid">
+      <div class="team-card"><div class="avatar">👤</div><h4>Vikram Anand</h4><p>Managing Director</p></div>
+      <div class="team-card"><div class="avatar">👤</div><h4>Sneha Kapoor</h4><p>Head of Hospitality</p></div>
+      <div class="team-card"><div class="avatar">👤</div><h4>Chef Rajan Suri</h4><p>Executive Chef</p></div>
+    </div>
+  </div>
+  <footer>
+    <div class="logo">THE ANANTARA GRAND</div>
+    <p>© 2025 The Anantara Grand Resort & Banquet. All rights reserved.</p>
+  </footer>
+</div>
+
+<!-- BOOKING -->
+<div id="booking" class="page">
+  <div style="background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:4rem 2rem;text-align:center">
+    <div class="section-tag" style="color:var(--gold-light)">RESERVATIONS</div>
+    <h1 style="font-size:2.5rem;font-weight:500;color:#fff;letter-spacing:2px;margin-top:.5rem">Book Your Experience</h1>
+  </div>
+  <div class="section">
+    <div class="booking-tabs">
+      <button class="tab-btn active" onclick="switchTab('room',this)">Room Booking</button>
+      <button class="tab-btn" onclick="switchTab('banquet',this)">Banquet Booking</button>
+    </div>
+
+    <div id="room" class="booking-form active">
+      <div class="card-grid" style="margin-bottom:2.5rem">
+        <div class="card"><div class="card-img">🛏️</div><div class="card-body"><h3>Deluxe Room</h3><p>350 sqft with garden view, king bed, minibar, and premium bath amenities.</p><div class="card-price">₹8,500 <span>/ night</span></div></div></div>
+        <div class="card"><div class="card-img">🌟</div><div class="card-body"><h3>Grand Suite</h3><p>650 sqft suite with living area, private balcony with city views, and butler service.</p><div class="card-price">₹18,000 <span>/ night</span></div></div></div>
+        <div class="card"><div class="card-img">👑</div><div class="card-body"><h3>Presidential Suite</h3><p>1,200 sqft. Private pool, dining room, dedicated concierge, and luxury transfers.</p><div class="card-price">₹45,000 <span>/ night</span></div></div></div>
+      </div>
+      <hr class="divider">
+      <h3 style="font-size:16px;margin-bottom:1.5rem;font-weight:500">Reserve a Room</h3>
+      <div id="room-success" class="success-msg">✓ Booking request received! Our team will contact you within 2 hours to confirm.</div>
+      <div class="form-wrap">
+        <div class="form-row">
+          <div class="form-group"><label>FULL NAME</label><input type="text" placeholder="Your full name"></div>
+          <div class="form-group"><label>PHONE / EMAIL</label><input type="text" placeholder="Contact details"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>CHECK-IN DATE</label><input type="date"></div>
+          <div class="form-group"><label>CHECK-OUT DATE</label><input type="date"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>ROOM TYPE</label>
+            <select><option>Deluxe Room — ₹8,500/night</option><option>Grand Suite — ₹18,000/night</option><option>Presidential Suite — ₹45,000/night</option></select>
+          </div>
+          <div class="form-group"><label>GUESTS</label>
+            <select><option>1 Adult</option><option>2 Adults</option><option>2 Adults + 1 Child</option><option>2 Adults + 2 Children</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>SPECIAL REQUESTS</label><textarea placeholder="Any dietary requirements, room preferences, or special occasions..."></textarea></div>
+        <div class="price-summary">
+          <div class="price-row"><span>Room rate</span><span>₹8,500 / night</span></div>
+          <div class="price-row"><span>Taxes & service (18%)</span><span>₹1,530</span></div>
+          <div class="price-row"><span>Estimated total (1 night)</span><span style="color:var(--gold)">₹10,030</span></div>
+        </div>
+        <button class="btn-gold" style="margin-top:1.5rem;width:100%" onclick="submitBooking('room')">Confirm Room Booking</button>
+      </div>
+    </div>
+
+    <div id="banquet" class="booking-form">
+      <div class="card-grid" style="margin-bottom:2.5rem">
+        <div class="card"><div class="card-img">💍</div><div class="card-body"><h3>The Grand Ballroom</h3><p>Capacity 2000 guests. Ideal for weddings, receptions, and large galas.</p><div class="card-price">₹3,50,000 <span>/ event</span></div></div></div>
+        <div class="card"><div class="card-img">🎊</div><div class="card-body"><h3>Crystal Hall</h3><p>Capacity 500 guests. Elegant setting for corporate dinners and cocktail evenings.</p><div class="card-price">₹1,20,000 <span>/ event</span></div></div></div>
+        <div class="card"><div class="card-img">🌿</div><div class="card-body"><h3>Garden Terrace</h3><p>Capacity 300 guests. Open-air setup with lush greenery, perfect for sundowners.</p><div class="card-price">₹85,000 <span>/ event</span></div></div></div>
+      </div>
+      <hr class="divider">
+      <h3 style="font-size:16px;margin-bottom:1.5rem;font-weight:500">Reserve a Banquet</h3>
+      <div id="banquet-success" class="success-msg">✓ Banquet inquiry received! Our events team will reach out within 24 hours.</div>
+      <div class="form-wrap">
+        <div class="form-row">
+          <div class="form-group"><label>CONTACT NAME</label><input type="text" placeholder="Your name"></div>
+          <div class="form-group"><label>PHONE / EMAIL</label><input type="text" placeholder="Contact details"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>EVENT DATE</label><input type="date"></div>
+          <div class="form-group"><label>EVENT TYPE</label>
+            <select><option>Wedding</option><option>Reception</option><option>Corporate Event</option><option>Birthday / Anniversary</option><option>Conference</option><option>Other</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>HALL PREFERENCE</label>
+            <select><option>The Grand Ballroom (up to 2000)</option><option>Crystal Hall (up to 500)</option><option>Garden Terrace (up to 300)</option></select>
+          </div>
+          <div class="form-group"><label>EXPECTED GUESTS</label><input type="number" placeholder="Number of guests"></div>
+        </div>
+        <div class="form-group"><label>EVENT DETAILS</label><textarea placeholder="Tell us about your event, catering preferences, decor theme, AV requirements..."></textarea></div>
+        <button class="btn-gold" style="margin-top:.5rem;width:100%" onclick="submitBooking('banquet')">Send Banquet Inquiry</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="logo">THE ANANTARA GRAND</div>
+    <p>© 2025 The Anantara Grand Resort & Banquet. All rights reserved.</p>
+  </footer>
+</div>
+
+<!-- GALLERY -->
+<div id="gallery" class="page">
+  <div style="background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:4rem 2rem;text-align:center">
+    <div class="section-tag" style="color:var(--gold-light)">VISUAL TOUR</div>
+    <h1 style="font-size:2.5rem;font-weight:500;color:#fff;letter-spacing:2px;margin-top:.5rem">Gallery</h1>
+    <p style="color:rgba(255,255,255,.6);margin-top:.5rem">Explore the beauty of The Anantara Grand</p>
+  </div>
+  <div class="section">
+    <div class="section-tag">PHOTOS</div>
+    <div class="section-title">Property Highlights</div>
+    <div class="gallery-grid">
+      <div class="gallery-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">🏛️</div><div class="gal-label">Grand Lobby</div></div>
+      <div class="gallery-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a2a1a,#1a4a2a)">🌊</div><div class="gal-label">Infinity Pool</div></div>
+      <div class="gallery-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#2a1a0a,#4a3010)">🛏️</div><div class="gal-label">Presidential Suite</div></div>
+      <div class="gallery-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#1a0a2a,#3a1a4a)">💍</div><div class="gal-label">Grand Ballroom</div></div>
+      <div class="gallery-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a1a2a,#1a2a4a)">🍽️</div><div class="gal-label">Fine Dining</div></div>
+      <div class="gallery-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#1a2a0a,#2a3a1a)">🌿</div><div class="gal-label">Garden Terrace</div></div>
+      <div class="gallery-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#2a0a0a,#4a1a1a)">🌅</div><div class="gal-label">Rooftop Bar</div></div>
+      <div class="gallery-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a2a2a,#0a3a3a)">🧖</div><div class="gal-label">Spa & Wellness</div></div>
+      <div class="gallery-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#1a1a1a,#2a2a2a)">🎊</div><div class="gal-label">Crystal Hall</div></div>
+    </div>
+    <hr class="divider">
+    <div class="section-tag">VIDEOS</div>
+    <div class="section-title">Experience on Screen</div>
+    <div class="video-grid">
+      <div class="video-card">
+        <div class="video-thumb" onclick="openYT('dQw4w9WgXcQ')">
+          <div style="position:absolute;top:12px;left:12px;background:rgba(255,0,0,.9);color:#fff;font-size:10px;padding:3px 8px;border-radius:3px;font-weight:500">YOUTUBE</div>
+          <div class="play-btn">▶</div>
+        </div>
+        <div class="video-meta"><h4>The Anantara Grand — Property Tour</h4><p>A complete walkthrough of our resort, suites, and facilities</p></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb" onclick="openYT('dQw4w9WgXcQ')" style="background:linear-gradient(135deg,#0f3460,#1a1a2e)">
+          <div style="position:absolute;top:12px;left:12px;background:rgba(255,0,0,.9);color:#fff;font-size:10px;padding:3px 8px;border-radius:3px;font-weight:500">YOUTUBE</div>
+          <div class="play-btn">▶</div>
+        </div>
+        <div class="video-meta"><h4>Grand Ballroom — Wedding Showcase</h4><p>Real weddings hosted at The Anantara Grand</p></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb" onclick="openYT('dQw4w9WgXcQ')" style="background:linear-gradient(135deg,#0a2a1a,#1a4a2a)">
+          <div style="position:absolute;top:12px;left:12px;background:rgba(255,0,0,.9);color:#fff;font-size:10px;padding:3px 8px;border-radius:3px;font-weight:500">YOUTUBE</div>
+          <div class="play-btn">▶</div>
+        </div>
+        <div class="video-meta"><h4>Culinary Experience</h4><p>Meet our chefs and explore our signature dishes</p></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb" onclick="openYT('dQw4w9WgXcQ')" style="background:linear-gradient(135deg,#2a0a1a,#4a1a2a)">
+          <div style="position:absolute;top:12px;left:12px;background:rgba(255,0,0,.9);color:#fff;font-size:10px;padding:3px 8px;border-radius:3px;font-weight:500">YOUTUBE</div>
+          <div class="play-btn">▶</div>
+        </div>
+        <div class="video-meta"><h4>Spa & Wellness Retreat</h4><p>Your guide to our award-winning wellness center</p></div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--color-text-secondary);margin-top:1rem">* Video thumbnails use placeholder YouTube links — replace with your actual YouTube video IDs.</p>
+  </div>
+  <footer>
+    <div class="logo">THE ANANTARA GRAND</div>
+    <p>© 2025 The Anantara Grand Resort & Banquet. All rights reserved.</p>
+  </footer>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="page">
+  <div style="background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:4rem 2rem;text-align:center">
+    <div class="section-tag" style="color:var(--gold-light)">GET IN TOUCH</div>
+    <h1 style="font-size:2.5rem;font-weight:500;color:#fff;letter-spacing:2px;margin-top:.5rem">Contact Us</h1>
+    <p style="color:rgba(255,255,255,.6);margin-top:.5rem">We'd love to hear from you</p>
+  </div>
+  <div class="section">
+    <div class="contact-grid">
+      <div>
+        <div class="section-tag">SEND A MESSAGE</div>
+        <div class="section-title" style="margin-bottom:1.5rem">We'll Respond Within 24h</div>
+        <div id="contact-success" class="success-msg">✓ Message sent! Our team will get back to you within 24 hours.</div>
+        <div class="form-group"><label>YOUR NAME</label><input type="text" placeholder="Full name"></div>
+        <div class="form-group"><label>EMAIL ADDRESS</label><input type="email" placeholder="your@email.com"></div>
+        <div class="form-group"><label>PHONE NUMBER</label><input type="tel" placeholder="+91 98765 43210"></div>
+        <div class="form-group"><label>SUBJECT</label>
+          <select><option>General Inquiry</option><option>Room Reservation</option><option>Banquet / Event Inquiry</option><option>Feedback</option><option>Media / PR</option><option>Other</option></select>
+        </div>
+        <div class="form-group"><label>MESSAGE</label><textarea placeholder="How can we assist you?"></textarea></div>
+        <button class="btn-gold" style="width:100%" onclick="submitContact()">Send Message</button>
+      </div>
+      <div>
+        <div class="map-placeholder"><span>📍</span><p>GRAND BOULEVARD, NEW DELHI</p></div>
+        <div class="info-card"><h4>ADDRESS</h4><p>The Anantara Grand<br>Grand Boulevard, Connaught Place<br>New Delhi — 110001</p></div>
+        <div class="info-card"><h4>RESERVATIONS</h4><p>📞 +91 11 4000 0000<br>📧 reservations@anantaragrand.com<br>⏰ Open 24 hours, 7 days</p></div>
+        <div class="info-card"><h4>BANQUET & EVENTS</h4><p>📞 +91 11 4000 0001<br>📧 events@anantaragrand.com<br>⏰ Mon – Sat, 9 AM – 7 PM</p></div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="logo">THE ANANTARA GRAND</div>
+    <p>© 2025 The Anantara Grand Resort & Banquet. All rights reserved.</p>
+    <p style="margin-top:8px">📍 Grand Boulevard, Connaught Place, New Delhi — 110001 &nbsp;|&nbsp; 📞 +91 11 4000 0000</p>
+  </footer>
+</div>
+
+<script>
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+function switchTab(id,btn){
+  document.querySelectorAll('.booking-form').forEach(f=>f.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function submitBooking(type){
+  var el=document.getElementById(type+'-success');
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none',5000);
+}
+function submitContact(){
+  var el=document.getElementById('contact-success');
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none',5000);
+}
+function openYT(id){
+  window.open('https://www.youtube.com/watch?v='+id,'_blank');
+}
+</script>
